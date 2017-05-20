@@ -6,12 +6,12 @@ from datetime import datetime
 from flask import render_template, jsonify, abort, make_response, request, url_for
 from FlaskWebProject1 import app
 #from flask.ext.httpauth import HTTPBasicAuth
-from flask_httpauth import HTTPBasicAuth
+#from flask_httpauth import HTTPBasicAuth
 
 ############
 
-auth = HTTPBasicAuth()
-
+#auth = HTTPBasicAuth()
+'''
 @auth.get_password
 def get_password(username):
     if username == 'miguel':
@@ -21,7 +21,7 @@ def get_password(username):
 @auth.error_handler
 def unauthorized():
     return make_response(jsonify({'error': 'Unauthorized access'}), 403)
-
+'''
 @app.errorhandler(400)
 def not_found(error):
     return make_response(jsonify( { 'error': 'Bad request' } ), 400)    
@@ -55,12 +55,12 @@ def make_public_task(task):
     return new_task
 
 @app.route('/todo/api/v1.0/tasks', methods=['GET'])
-@auth.login_required
+#@auth.login_required
 def get_tasks():
     return jsonify({'tasks': list(map(make_public_task, tasks))})
 
 @app.route('/todo/api/v1.0/tasks/<int:task_id>', methods=['GET'])
-@auth.login_required
+#@auth.login_required
 def get_task(task_id):
     task = list(filter(lambda t: t['id'] == task_id, tasks))
     if len(task) == 0:
@@ -69,7 +69,7 @@ def get_task(task_id):
 
 
 @app.route('/todo/api/v1.0/tasks', methods=['POST'])
-@auth.login_required
+#@auth.login_required
 def create_task():
     if (not request.json) or (not 'title' in request.json):
         abort(400)
@@ -83,7 +83,7 @@ def create_task():
     return jsonify({'task': task}), 201
 
 @app.route('/todo/api/v1.0/tasks/<int:task_id>', methods=['PUT'])
-@auth.login_required
+#@auth.login_required
 def update_task(task_id):
     print (request.json)
     print (type(request.json))
@@ -100,7 +100,7 @@ def update_task(task_id):
     return jsonify({'task': task[0]})
 
 @app.route('/todo/api/v1.0/tasks/<int:task_id>', methods=['DELETE'])
-@auth.login_required
+#@auth.login_required
 def delete_task(task_id):
     task = filter(lambda t: t['id'] == task_id, tasks)
     if len(task) == 0:
